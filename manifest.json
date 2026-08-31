@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Somtoday+",
-  "version": "1.0.0",
-  "description": "Maak Somtoday persoonlijker, slimmer en fijner in gebruik.",
+  "name": "Somtoday PLUS+",
+  "version": "1.0",
+  "description": "Maak Somtoday persoonlijker, slimmer en fijner voor gebruik.",
   "permissions": ["storage"],
   "host_permissions": ["*://*.somtoday.nl/*", "*://som.today/*"],
   "content_scripts": [{
