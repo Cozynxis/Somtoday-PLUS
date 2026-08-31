@@ -7,10 +7,17 @@
   "host_permissions": ["*://*.somtoday.nl/*", "*://som.today/*"],
   "content_scripts": [{
     "matches": ["*://*.somtoday.nl/*", "*://som.today/*"],
-    "js": ["src/core/storage.js", "src/features/theme.js", "src/settings/settings.js", "src/core/app.js"],
+    "js": [
+      "src/core/storage.js",
+      "src/features/theme.js",
+      "src/features/enhancements.js",
+      "src/settings/settings.js",
+      "src/settings/integration.js",
+      "src/core/app.js"
+    ],
     "css": ["src/styles/somtoday-plus.css"],
     "run_at": "document_end"
   }],
   "background": {"service_worker": "src/background.js"},
-  "action": {"default_title": "Somtoday+", "default_popup": "popup.html"}
+  "action": {"default_title": "Somtoday PLUS+", "default_popup": "popup.html"}
 }
