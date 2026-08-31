@@ -15,7 +15,7 @@
       "src/settings/integration.js",
       "src/core/app.js"
     ],
-    "css": ["src/styles/somtoday-plus.css"],
+    "css": ["src/styles/somtoday-plus.css", "src/styles/features.css"],
     "run_at": "document_end"
   }],
   "background": {"service_worker": "src/background.js"},
