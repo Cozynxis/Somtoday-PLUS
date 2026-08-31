@@ -1,0 +1,23 @@
+(()=>{
+'use strict';
+const S=()=>window.SomtodayPlusStorage?.get();
+let observer=null;
+function setClass(name,on){document.documentElement.classList.toggle(name,!!on)}
+function applyTitle(s){if(s.customTitleEnabled&&s.customTitle?.trim())document.title=s.customTitle.trim()}
+function applyPrivacy(s){setClass('stp-privacy',s.privacyMode);setClass('stp-focus',s.focusMode);setClass('stp-selectable',s.selectableText);setClass('stp-hide-scrollbar',s.hideScrollbar);setClass('stp-sticky-topbar',s.stickyTopbar);setClass('stp-dim-weekends',s.dimWeekends)}
+function applyDensity(s){document.documentElement.style.setProperty('--stp-font-scale',String(s.fontScale||1));document.documentElement.style.setProperty('--stp-card-gap',`${s.cardGap??12}px`)}
+function decorate(){document.querySelectorAll('sl-rooster-item,[class*=rooster-item],[class*=afspraak]').forEach(el=>el.classList.add('stp-enhanced-schedule-item'));document.querySelectorAll('.cijfer,[class*=cijfer]').forEach(el=>el.classList.add('stp-grade-target'));}
+async function apply(){const s=await S();if(!s)return;applyPrivacy(s);applyDensity(s);applyTitle(s);decorate()}
+function toast(text){let t=document.querySelector('.stp-toast');if(!t){t=document.createElement('div');t.className='stp-toast';document.body.appendChild(t)}t.textContent=text;t.classList.remove('show');requestAnimationFrame(()=>t.classList.add('show'));clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2200)}
+function toggleQuick(key,label){S().then(async s=>{const next=!s[key];await SomtodayPlusStorage.set({[key]:next});toast(`${label}: ${next?'aan':'uit'}`)})}
+function openCommandPalette(){if(document.querySelector('#stp-command'))return;const root=document.createElement('div');root.id='stp-command';const actions=[
+['Somtoday PLUS+ instellingen','Open het uitgebreide instellingenmenu','settings'],
+['Focusmodus','Verberg afleiding en houd de hoofdinhoud centraal','focusMode'],
+['Privacymodus','Vervaag cijfers en gevoelige gegevens','privacyMode'],
+['Compacte weergave','Maak de interface compacter','compact'],
+['Animaties','Zet PLUS+ animaties aan of uit','animations'],
+['Selecteerbare tekst','Maak tekst makkelijker selecteerbaar','selectableText']
+];root.innerHTML=`<div class="stp-command-box"><div class="stp-command-search"><span>⌕</span><input autofocus placeholder="Zoek een actie…"><kbd>ESC</kbd></div><div class="stp-command-list"></div><div class="stp-command-foot">Somtoday PLUS+ · Ctrl + K</div></div>`;document.body.appendChild(root);const input=root.querySelector('input'),list=root.querySelector('.stp-command-list');function render(){const q=input.value.toLowerCase().trim();list.innerHTML='';actions.filter(a=>(a[0]+' '+a[1]).toLowerCase().includes(q)).forEach((a,i)=>{const b=document.createElement('button');b.innerHTML=`<span class="stp-command-action-icon">${a[2]==='settings'?'⚙':'✦'}</span><span><b>${a[0]}</b><small>${a[1]}</small></span>`;b.onclick=()=>{root.remove();a[2]==='settings'?(SomtodayPlusNativeSettings?.open()||SomtodayPlusSettings?.openFallback()):toggleQuick(a[2],a[0])};list.appendChild(b)});if(!list.children.length)list.innerHTML='<div class="stp-command-empty">Geen acties gevonden</div>'}input.oninput=render;root.onclick=e=>{if(e.target===root)root.remove()};render()}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommandPalette()}if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==='s'){e.preventDefault();SomtodayPlusNativeSettings?.open()||SomtodayPlusSettings?.openFallback()}if(e.key==='Escape')document.querySelector('#stp-command')?.remove()});
+window.addEventListener('stp:settings',apply);chrome.storage.onChanged.addListener(apply);observer=new MutationObserver(()=>decorate());observer.observe(document.documentElement,{childList:true,subtree:true});apply();window.SomtodayPlusEnhancements={apply,toast,openCommandPalette};
+})();
