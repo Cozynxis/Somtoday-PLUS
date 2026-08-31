@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener(async d=>{if(d.reason==='install'){await chrome.storage.local.set({enabled:true,animations:true,rounded:true,accent:'#1565c0'})}});
