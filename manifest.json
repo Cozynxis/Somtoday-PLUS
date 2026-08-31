@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Somtoday PLUS+",
+  "name": "Somtoday+",
   "version": "1.0",
   "description": "Maak Somtoday persoonlijker, slimmer en fijner voor gebruik.",
   "permissions": ["storage"],
