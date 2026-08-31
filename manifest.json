@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Somtoday+",
+  "version": "1.0.0",
+  "description": "Maak Somtoday persoonlijker, slimmer en fijner in gebruik.",
+  "permissions": ["storage"],
+  "host_permissions": ["*://*.somtoday.nl/*", "*://som.today/*"],
+  "content_scripts": [{
+    "matches": ["*://*.somtoday.nl/*", "*://som.today/*"],
+    "js": ["src/core/storage.js", "src/features/theme.js", "src/settings/settings.js", "src/core/app.js"],
+    "css": ["src/styles/somtoday-plus.css"],
+    "run_at": "document_end"
+  }],
+  "background": {"service_worker": "src/background.js"},
+  "action": {"default_title": "Somtoday+", "default_popup": "popup.html"}
+}
